@@ -84,12 +84,13 @@ public class MahasiswaModel {
         try {
             PreparedStatement statement = koneksi.connect().prepareStatement(query);
             //statement.setString(1, "default");
-            statement.setString(1, m.getId());
+            statement.setInt(1, Integer.valueOf(m.getId()));
 
-            int row = statement.executeUpdate();
-            if (row > 0) {
-                return true;
-            }
+            statement.executeUpdate();
+            return true;
+//            if (row > 0) {
+//                return true;
+//            }
         } catch (SQLException ex) {
             Logger.getLogger(MahasiswaModel.class.getName()).log(Level.SEVERE, null, ex);
         }

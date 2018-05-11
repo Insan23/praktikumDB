@@ -58,13 +58,13 @@ public class FormInputMhs extends javax.swing.JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 baris = TblMahasiswa.getSelectedRow();
-                
-                String nim = txtNim.getText();
-                String nama = txtNama.getText();
-                
+
+                String nim = TblMahasiswa.getValueAt(baris, 1).toString();
+                String nama = TblMahasiswa.getValueAt(baris, 2).toString();
+
                 txtNim.setText(nim);
                 txtNama.setText(nama);
-                
+
                 btnUpdate.setEnabled(true);
                 btnDelete.setEnabled(true);
             }
@@ -126,6 +126,16 @@ public class FormInputMhs extends javax.swing.JFrame {
             }
             TblMahasiswa.setModel(tableModel);
         }
+    }
+
+    private void clear() {
+        btnClear.setEnabled(false);
+        btnSave.setEnabled(false);
+        btnDelete.setEnabled(false);
+        btnUpdate.setEnabled(false);
+        setTableModel(mahasiswaModel.getData());
+        txtNim.setText("");
+        txtNama.setText("");
     }
 
     /**
@@ -271,14 +281,7 @@ public class FormInputMhs extends javax.swing.JFrame {
     }//GEN-LAST:event_txtNimActionPerformed
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
-        btnClear.setEnabled(false);
-        btnSave.setEnabled(false);
-        btnDelete.setEnabled(false);
-        btnUpdate.setEnabled(false);
-        setTableModel(mahasiswaModel.getData());
-        txtNim.setText("");
-        txtNama.setText("");
-        
+        clear();
     }//GEN-LAST:event_btnClearActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
@@ -294,13 +297,11 @@ public class FormInputMhs extends javax.swing.JFrame {
         } else {
             JOptionPane.showMessageDialog(rootPane, "Gagal Menambah Data", "GAGAL", JOptionPane.ERROR_MESSAGE);
         }
-
-        txtNim.setText("");
-        txtNama.setText("");
+        clear();
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        String id = TblMahasiswa.getValueAt(baris, 1).toString();
+        String id = TblMahasiswa.getValueAt(baris, 0).toString();
         String Nim = txtNim.getText();
         String Nama = txtNama.getText();
         Mahasiswa m = new Mahasiswa(id, Nim, Nama);
@@ -310,7 +311,7 @@ public class FormInputMhs extends javax.swing.JFrame {
         } else {
             JOptionPane.showMessageDialog(rootPane, "Gagal Menghapus Data", "GAGAL", JOptionPane.ERROR_MESSAGE);
         }
-        btnDelete.setEnabled(false);
+        clear();
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
@@ -324,7 +325,7 @@ public class FormInputMhs extends javax.swing.JFrame {
         } else {
             JOptionPane.showMessageDialog(rootPane, "Gagal Mengubah Data", "GAGAL", JOptionPane.ERROR_MESSAGE);
         }
-        btnUpdate.setEnabled(true);
+        clear();
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     /**
