@@ -18,7 +18,9 @@ import java.util.logging.Logger;
  * @author eldi
  */
 public class MahasiswaModel {
+
     Koneksi koneksi = new Koneksi();
+
     public boolean insert(Mahasiswa m) {
         String query = "INSERT INTO mahasiswa VALUES (DEFAULT, ?, ?);";
         try {
@@ -26,19 +28,18 @@ public class MahasiswaModel {
             //statement.setString(1, "default");
             statement.setString(1, m.getNim());
             statement.setString(2, m.getNama());
-            
+
             int row = statement.executeUpdate();
             if (row > 0) {
                 return true;
             }
-            
         } catch (SQLException ex) {
             Logger.getLogger(MahasiswaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
         return false;
     }
-        public List<Mahasiswa> getData() {
+
+    public List<Mahasiswa> getData() {
         List<Mahasiswa> allMahasiswa = new ArrayList<>();
         String query = "select * from mahasiswa";
         try {
@@ -46,10 +47,9 @@ public class MahasiswaModel {
             ResultSet rs = statement.executeQuery();
             while (rs.next()) {
                 Mahasiswa m = new Mahasiswa(
-                  rs.getString(1),
-                  rs.getString(2),
-                  rs.getString(3)
-                  
+                        rs.getString(1),
+                        rs.getString(2),
+                        rs.getString(3)
                 );
                 allMahasiswa.add(m);
             }
@@ -59,5 +59,40 @@ public class MahasiswaModel {
         }
         return allMahasiswa;
     }
-}
 
+    public boolean updateData(Mahasiswa m) {
+        String query = "UPDATE mahasiswa SET nim=?, nama=? WHERE id=?;";
+        try {
+            PreparedStatement statement = koneksi.connect().prepareStatement(query);
+            //statement.setString(1, "default");
+            statement.setString(1, m.getNim());
+            statement.setString(2, m.getNama());
+            statement.setString(3, m.getId());
+
+            int row = statement.executeUpdate();
+            if (row > 0) {
+                return true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(MahasiswaModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+
+    public boolean deleteData(Mahasiswa m) {
+        String query = "DELETE FROM mahasiswa WHERE id=?;";
+        try {
+            PreparedStatement statement = koneksi.connect().prepareStatement(query);
+            //statement.setString(1, "default");
+            statement.setString(1, m.getId());
+
+            int row = statement.executeUpdate();
+            if (row > 0) {
+                return true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(MahasiswaModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+}

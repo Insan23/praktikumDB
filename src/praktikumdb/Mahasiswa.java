@@ -10,7 +10,8 @@ package praktikumdb;
  * @author eldi
  */
 public class Mahasiswa {
-    private String id,nim,nama;
+
+    private String id, nim, nama;
 
     public Mahasiswa(String id, String nim, String nama) {
         this.id = id;
@@ -41,6 +42,5 @@ public class Mahasiswa {
     public void setNama(String nama) {
         this.nama = nama;
     }
-    
-    
+
 }

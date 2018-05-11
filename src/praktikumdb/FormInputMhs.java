@@ -5,8 +5,12 @@
  */
 package praktikumdb;
 
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -14,7 +18,9 @@ import javax.swing.table.DefaultTableModel;
  * @author eldi
  */
 public class FormInputMhs extends javax.swing.JFrame {
+
     MahasiswaModel mahasiswaModel = new MahasiswaModel();
+    int baris;
 
     /**
      * Creates new form FormInputMhs
@@ -22,9 +28,82 @@ public class FormInputMhs extends javax.swing.JFrame {
     public FormInputMhs() {
         initComponents();
         setTableModel(mahasiswaModel.getData());
+
+        txtNim.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                check();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                check();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                check();
+            }
+
+            private void check() {
+                if (txtNim.getText().toString().equalsIgnoreCase("") && txtNama.getText().toString().equalsIgnoreCase("")) {
+                    changeState(false);
+                } else {
+                    changeState(true);
+                }
+            }
+        });
+
+        TblMahasiswa.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                baris = TblMahasiswa.getSelectedRow();
+                
+                String nim = txtNim.getText();
+                String nama = txtNama.getText();
+                
+                txtNim.setText(nim);
+                txtNama.setText(nama);
+                
+                btnUpdate.setEnabled(true);
+                btnDelete.setEnabled(true);
+            }
+
+            //<editor-fold defaultstate="collapsed" desc="listener">
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
+            //</editor-fold>
+        });
     }
-    
-      private void setTableModel(List<Mahasiswa> allMahasiswas) {
+
+    private void changeState(boolean b) {
+        if (b) {
+            btnClear.setEnabled(true);
+            btnSave.setEnabled(true);
+        } else {
+            btnClear.setEnabled(false);
+            btnSave.setEnabled(false);
+        }
+    }
+
+    private void setTableModel(List<Mahasiswa> allMahasiswas) {
         if (allMahasiswas == null) {
             JOptionPane.showMessageDialog(this, "Gagal mengambil data dari DB");
         } else {
@@ -34,9 +113,7 @@ public class FormInputMhs extends javax.swing.JFrame {
             tableModel.setColumnIdentifiers(new String[]{
                 "id",
                 "nim",
-                "nama",
-               
-            }
+                "nama",}
             );
             // untuk setiap data di database, masukkan ke tiap2 baris tabel
             for (Mahasiswa m : allMahasiswas) {
@@ -44,7 +121,7 @@ public class FormInputMhs extends javax.swing.JFrame {
                 objects[0] = m.getId();
                 objects[1] = m.getNim();
                 objects[2] = m.getNama();
-                
+
                 tableModel.addRow(objects);
             }
             TblMahasiswa.setModel(tableModel);
@@ -69,6 +146,8 @@ public class FormInputMhs extends javax.swing.JFrame {
         btnSave = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         TblMahasiswa = new javax.swing.JTable();
+        btnDelete = new javax.swing.JButton();
+        btnUpdate = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -85,6 +164,7 @@ public class FormInputMhs extends javax.swing.JFrame {
         });
 
         btnClear.setText("Clear");
+        btnClear.setEnabled(false);
         btnClear.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnClearActionPerformed(evt);
@@ -92,6 +172,7 @@ public class FormInputMhs extends javax.swing.JFrame {
         });
 
         btnSave.setText("Save");
+        btnSave.setEnabled(false);
         btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSaveActionPerformed(evt);
@@ -111,6 +192,22 @@ public class FormInputMhs extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(TblMahasiswa);
 
+        btnDelete.setText("Delete");
+        btnDelete.setEnabled(false);
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
+
+        btnUpdate.setText("Update");
+        btnUpdate.setEnabled(false);
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -128,12 +225,16 @@ public class FormInputMhs extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnClear)
-                        .addGap(54, 54, 54)
-                        .addComponent(btnSave))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnSave)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnDelete)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnUpdate))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(txtNim)
                         .addComponent(txtNama, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(39, 39, 39))
         );
@@ -155,7 +256,9 @@ public class FormInputMhs extends javax.swing.JFrame {
                         .addGap(42, 42, 42)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnClear)
-                            .addComponent(btnSave)))
+                            .addComponent(btnSave)
+                            .addComponent(btnDelete)
+                            .addComponent(btnUpdate)))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(135, Short.MAX_VALUE))
         );
@@ -168,9 +271,14 @@ public class FormInputMhs extends javax.swing.JFrame {
     }//GEN-LAST:event_txtNimActionPerformed
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
-        // TODO add your handling code here:
+        btnClear.setEnabled(false);
+        btnSave.setEnabled(false);
+        btnDelete.setEnabled(false);
+        btnUpdate.setEnabled(false);
+        setTableModel(mahasiswaModel.getData());
         txtNim.setText("");
         txtNama.setText("");
+        
     }//GEN-LAST:event_btnClearActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
@@ -178,18 +286,46 @@ public class FormInputMhs extends javax.swing.JFrame {
         String nim = txtNim.getText();
         String nama = txtNama.getText();
         Mahasiswa mahasiswa = new Mahasiswa("", nim, nama);
-        
-         boolean hasil = mahasiswaModel.insert(mahasiswa);
-        if (hasil == true) {
-            System.out.println("Berhasil ditambahkan");
+
+        boolean hasil = mahasiswaModel.insert(mahasiswa);
+        if (hasil) {
+            JOptionPane.showMessageDialog(rootPane, "Berhasil Menambah Data", "SUKSES", JOptionPane.INFORMATION_MESSAGE);
             setTableModel(mahasiswaModel.getData());
         } else {
-            System.out.println("Gagal!");
+            JOptionPane.showMessageDialog(rootPane, "Gagal Menambah Data", "GAGAL", JOptionPane.ERROR_MESSAGE);
         }
-        
+
         txtNim.setText("");
         txtNama.setText("");
     }//GEN-LAST:event_btnSaveActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        String id = TblMahasiswa.getValueAt(baris, 1).toString();
+        String Nim = txtNim.getText();
+        String Nama = txtNama.getText();
+        Mahasiswa m = new Mahasiswa(id, Nim, Nama);
+        boolean status = mahasiswaModel.deleteData(m);
+        if (status) {
+            JOptionPane.showMessageDialog(rootPane, "Berhasil Menghapus Data", "SUKSES", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "Gagal Menghapus Data", "GAGAL", JOptionPane.ERROR_MESSAGE);
+        }
+        btnDelete.setEnabled(false);
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        String id = TblMahasiswa.getValueAt(baris, 1).toString();
+        String Nim = txtNim.getText();
+        String Nama = txtNama.getText();
+        Mahasiswa m = new Mahasiswa(id, Nim, Nama);
+        boolean status = mahasiswaModel.updateData(m);
+        if (status) {
+            JOptionPane.showMessageDialog(rootPane, "Berhasil Mengubah Data", "SUKSES", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "Gagal Mengubah Data", "GAGAL", JOptionPane.ERROR_MESSAGE);
+        }
+        btnUpdate.setEnabled(true);
+    }//GEN-LAST:event_btnUpdateActionPerformed
 
     /**
      * @param args the command line arguments
@@ -229,7 +365,9 @@ public class FormInputMhs extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable TblMahasiswa;
     private javax.swing.JButton btnClear;
+    private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnSave;
+    private javax.swing.JButton btnUpdate;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
