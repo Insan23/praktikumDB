@@ -67,8 +67,8 @@ public class MahasiswaModel {
             //statement.setString(1, "default");
             statement.setString(1, m.getNim());
             statement.setString(2, m.getNama());
-            statement.setString(3, m.getId());
-
+            statement.setInt(3, Integer.valueOf(m.getId()));
+            System.out.println("id" + m.getId() + "nim " + m.getNim() + "nama " + m.getNama());
             int row = statement.executeUpdate();
             if (row > 0) {
                 return true;
@@ -86,11 +86,11 @@ public class MahasiswaModel {
             //statement.setString(1, "default");
             statement.setInt(1, Integer.valueOf(m.getId()));
 
-            statement.executeUpdate();
-            return true;
-//            if (row > 0) {
-//                return true;
-//            }
+            int row = statement.executeUpdate();
+            
+            if (row > 0) {
+                return true;
+            }
         } catch (SQLException ex) {
             Logger.getLogger(MahasiswaModel.class.getName()).log(Level.SEVERE, null, ex);
         }

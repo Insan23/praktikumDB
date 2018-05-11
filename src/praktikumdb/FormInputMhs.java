@@ -302,6 +302,7 @@ public class FormInputMhs extends javax.swing.JFrame {
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         String id = TblMahasiswa.getValueAt(baris, 0).toString();
+        
         String Nim = txtNim.getText();
         String Nama = txtNama.getText();
         Mahasiswa m = new Mahasiswa(id, Nim, Nama);
@@ -315,7 +316,7 @@ public class FormInputMhs extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        String id = TblMahasiswa.getValueAt(baris, 1).toString();
+        String id = TblMahasiswa.getValueAt(baris, 0).toString();
         String Nim = txtNim.getText();
         String Nama = txtNama.getText();
         Mahasiswa m = new Mahasiswa(id, Nim, Nama);
